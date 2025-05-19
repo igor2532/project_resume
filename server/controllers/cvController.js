@@ -39,25 +39,32 @@ export const createCV = async (req, res) => {
 export const updateCV = async (req, res) => {
   try {
     const { id } = req.params;
-    let { title, salary, post, conditions, ...otherFields } = req.body;
+    // Возможно вот тут! 👇
+    let { title, salary, post, conditions, professions, hard_skill, ...otherFields } = req.body;
 
-    // если массив — сериализуем в строку
-    if (Array.isArray(conditions)) {
-      conditions = JSON.stringify(conditions);
-    }
+    // Тебе нужно обязательно получить professions и hard_skill из тела запроса, иначе дальше в коде они будут undefined
+
+    // Тут сериализация, если надо
+    if (Array.isArray(conditions)) conditions = JSON.stringify(conditions);
+    if (Array.isArray(professions)) professions = JSON.stringify(professions);
+    if (Array.isArray(hard_skill)) hard_skill = JSON.stringify(hard_skill);
 
     await CV.update(
-      { title, salary, post, conditions,professions, hard_skill, currency, ...otherFields },
+      { title, salary, post, conditions, professions, hard_skill, ...otherFields },
       { where: { id } }
     );
 
     const updatedCV = await CV.findByPk(id);
 
-    // если нужно — парсим обратно для фронта
+    // Для фронта можно десериализовать обратно (если надо)
     if (updatedCV.conditions && typeof updatedCV.conditions === 'string') {
-      try {
-        updatedCV.conditions = JSON.parse(updatedCV.conditions);
-      } catch {}
+      try { updatedCV.conditions = JSON.parse(updatedCV.conditions); } catch {}
+    }
+    if (updatedCV.professions && typeof updatedCV.professions === 'string') {
+      try { updatedCV.professions = JSON.parse(updatedCV.professions); } catch {}
+    }
+    if (updatedCV.hard_skill && typeof updatedCV.hard_skill === 'string') {
+      try { updatedCV.hard_skill = JSON.parse(updatedCV.hard_skill); } catch {}
     }
 
     res.json(updatedCV);
@@ -65,7 +72,6 @@ export const updateCV = async (req, res) => {
     res.status(500).json({ message: 'Failed to update CV', error: e.message });
   }
 };
-
 
 
 export const deleteCV = async (req, res) => {

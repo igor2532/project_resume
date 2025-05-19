@@ -202,7 +202,8 @@ if (!cv.title) {
       });
     }
     else {
- const res = await saveCv({ cv_id, body: { ...cv, title: cv.post, conditions: JSON.stringify(cv.conditions) } }).unwrap();
+      // const res = await saveCv({ cv_id, body: { ...cv, title: cv.post, conditions: JSON.stringify(cv.conditions) } }).unwrap();
+      const res = await saveCv({ cv_id, body: {...cv, title: cv.post} })
 dispatch(setCv(res));  
       openSuccessNotify('Сохранено');
     }
@@ -217,7 +218,7 @@ dispatch(setCv(res));
   };
   const generateWithOptions = () => generatePDF(getTargetElement, { page: {} });
   return (
-    <div className="constructor_page__side">
+    <div  style={{maxWidth:800, margin:'0 auto'}}   className="constructor_page__side">
       {contextHolder}
       <div className="constructor_page__side__controls">
         <Button
@@ -234,7 +235,7 @@ dispatch(setCv(res));
           <SaveOutlined />
         </Button>
       </div>
-      <div className="constructor_page__side__editor">
+      <div style={{maxWidth:800, margin:'0 auto'}} className="constructor_page__side__editor">
         <Divider>Редактор резюме</Divider>
         <Button
           onClick={onClickUpdateCv}

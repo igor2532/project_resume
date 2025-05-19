@@ -28,14 +28,16 @@ const ConstructorPage = () => {
   return (
     <div className={'constructor_page'}>
       {/* Кнопка переключения режимов */}
-      <div style={{ display: 'flex', justifyContent: 'flex-end', padding: 10 }}>
-        <button onClick={() => setEditMode((prev) => !prev)}>
+      <div style={{ display: 'flex', justifyContent: 'flex-end', padding: 10, maxWidth:'800px', margin: '0 auto' }}>
+        <button  onClick={() => setEditMode((prev) => !prev)}>
           {editMode ? 'Вернуться к просмотру' : 'Редактировать'}
         </button>
       </div>
       {/* Контент по режиму */}
       {editMode ? (
+           <div className="constructor-sidebar">
         <ConstructorSideBar />
+         </div>
       ) : (
         <div className="constructor_page__content_wrapper">
           <CvContentHOC />

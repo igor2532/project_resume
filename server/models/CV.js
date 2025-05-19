@@ -31,30 +31,18 @@ professions: {
   allowNull: true,
   get() {
     const rawValue = this.getDataValue('professions');
-    try {
-      return JSON.parse(rawValue);
-    } catch {
-      return [];
-    }
+    try { return JSON.parse(rawValue); } catch { return []; }
   },
-  set(val) {
-    this.setDataValue('professions', JSON.stringify(val));
-  },
+  set(val) { this.setDataValue('professions', JSON.stringify(val)); },
 },
 hard_skill: {
   type: DataTypes.TEXT,
   allowNull: true,
   get() {
     const rawValue = this.getDataValue('hard_skill');
-    try {
-      return JSON.parse(rawValue);
-    } catch {
-      return [];
-    }
+    try { return JSON.parse(rawValue); } catch { return []; }
   },
-  set(val) {
-    this.setDataValue('hard_skill', JSON.stringify(val));
-  },
+  set(val) { this.setDataValue('hard_skill', JSON.stringify(val)); },
 },
 currency: {
   type: DataTypes.STRING,
