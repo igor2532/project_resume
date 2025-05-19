@@ -43,7 +43,7 @@ const conditionsArr = safeParseArray(cv.conditions);
   }
   return (
     <div>
-      <Suspense fallback={<div>Загрузка...</div>}><CvDefaultCVPage /></Suspense>
+      <Suspense fallback={<div>Загрузка...</div>}><CvContentPage /></Suspense>
     </div>
   );
 };

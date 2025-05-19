@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { usePDF } from 'react-to-pdf';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 import { useGetMeQuery } from '../../../entities/user/index.js';
 import { SocialIcon } from 'react-social-icons';
 import {
@@ -15,7 +16,7 @@ import CanvasComponent from '../../../shared/components/CanvasImage/CanvasImage'
 import { formatDateCv } from '../../../shared/lib/formatDateCv';
 
 const ConstructorContent = () => {
-  const { toPDF, targetRef } = usePDF({ filename: 'page.pdf' });
+  // const { toPDF, targetRef } = usePDF({ filename: 'page.pdf' });
   const [scaleIndex, setScaleIndex] = useState(null);
   const [styles, setStyles] = useState({});
   const { cv_id } = useParams();
@@ -42,16 +43,27 @@ const ConstructorContent = () => {
     };
   }, []);
 
-  useEffect(() => {
-    // TODO домножение на 2 при большом колличестве контента?
-    // setScaleIndex(targetRef.current?.offsetWidth * Math.sqrt(2) * 1.999);
-    // setScaleIndex(targetRef.current?.offsetWidth * Math.sqrt(2));
-  }, [targetRef]);
-
+  // useEffect(() => {
+  //   // TODO домножение на 2 при большом колличестве контента?
+  //   // setScaleIndex(targetRef.current?.offsetWidth * Math.sqrt(2) * 1.999);
+  //   // setScaleIndex(targetRef.current?.offsetWidth * Math.sqrt(2));
+  // }, [targetRef]);
+const exportPdf = () => {
+  const input = document.getElementById('pdf-content');
+  html2canvas(input).then((canvas) => {
+    const imgData = canvas.toDataURL('image/png');
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    const imgProps = pdf.getImageProperties(imgData);
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+    pdf.save('document.pdf');
+  });
+};
   return (
-    <div ref={targetRef} className={styles.cv_container} id={'cv'}>
+    <div  className={styles.cv_container} id="pdf-content">
       {/*<div className={styles.donne2}></div>*/}
-
+      <button onClick={exportPdf}>Скачать PDF</button>
       <div className={styles.cv_side_info} style={{ backgroundColor: cv?.main_color }}>
         <CanvasComponent width={200} path={'/tmp/Photo_on_Resume.png'} height={250} />
         {/*<img className={styles.avatar} src={'/tmp/Photo_on_Resume.png'} alt="" />*/}
