@@ -26,9 +26,9 @@ app.use('/api/currency', currency);
 
 
 const PORT = process.env.PORT || 3001;
-
+// const PORT =  3001;
 sequelize.sync().then(() => {
-  app.listen(PORT, '0.0.0.0', () => {
+  app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
   });
 }).catch(err => console.error('DB sync error:', err));
